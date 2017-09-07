@@ -755,7 +755,7 @@ for (tumorID in (1:ntum)) {
     predict<-predictClust(chrom = data$chr,pos = data$start, ratio=obsRec, outfit=fit$output)
     zero <-predict$zero
     print(zero)
-    if (abs(zero)<abs(myzero)) {
+    if (length(zero) > 0 && abs(zero)<abs(myzero)) {
       myzero<-zero
       mypredict<-predict
     }
