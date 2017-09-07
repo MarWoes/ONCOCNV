@@ -117,6 +117,14 @@ if (normalContam == "") {
     }
 }
 
+save.t.test <- function (values, default, mu = 0) {
+  tryCatch({
+    return(t.test(values, mu = mu)$p.value)
+  }, error = function (e) {
+    return(default)
+  })
+}
+
 createSummaryByGen<- function(output){
   
   summary(output)
@@ -1189,7 +1197,7 @@ for (tumorID in (1:ntum)) {
             tt<- which(correspondance==fragRatio_S & !is.na(geneSetout$ratio)) 
             AbsMeanSigmaRatio <- abs(mean((geneSetout$ratio[tt]-fragRatio)/sdCorrection/geneSet$sd[tt],na.rm=TRUE)) #mean difference normalized by sigma. under the null hypothesis is distributed and N(0,1/sqrt(n))
             if(length(tt)>1) {
-              ttestPvalRatio[i]<-t.test((geneSetout$ratio[tt]-fragRatio)/sdCorrection/geneSet$sd[tt],mu=0)$p.value
+              ttestPvalRatio[i]<-save.t.test((geneSetout$ratio[tt]-fragRatio)/sdCorrection/geneSet$sd[tt],pnorm(AbsMeanSigmaRatio,lower.tail = FALSE)*2,mu=0)
             }else {
               ttestPvalRatio[i]<-pnorm(AbsMeanSigmaRatio,lower.tail = FALSE)*2
             }
@@ -1206,7 +1214,7 @@ for (tumorID in (1:ntum)) {
               tt<- which(correspondance==fragRatio_S & !is.na(geneSetout$ratio)) 
               AbsMeanSigmaRatio <- abs(mean((geneSetout$ratio[tt]-fragRatio)/sdCorrection/geneSet$sd[tt],na.rm=TRUE)) #mean difference normalized by sigma. under the null hypothesis is distributed and N(0,1/sqrt(n))
               if(length(tt)>1) {
-                ttestPvalRatio[i]<-t.test((geneSetout$ratio[tt]-fragRatio)/sdCorrection/geneSet$sd[tt],mu=0)$p.value
+                ttestPvalRatio[i]<-save.t.test((geneSetout$ratio[tt]-fragRatio)/sdCorrection/geneSet$sd[tt],pnorm(AbsMeanSigmaRatio,lower.tail = FALSE)*2,mu=0)
               }else {
                 ttestPvalRatio[i]<-pnorm(AbsMeanSigmaRatio,lower.tail = FALSE)*2
               }
@@ -1230,7 +1238,7 @@ for (tumorID in (1:ntum)) {
                 tt<- which(correspondance==fragRatio_S & !is.na(geneSetout$ratio))  
                 AbsMeanSigmaRatio <- abs(mean((geneSetout$ratio[tt])/sdCorrection/geneSet$sd[tt],na.rm=TRUE)) #mean difference normalized by sigma. under the null hypothesis is distributed and N(0,1/sqrt(n))
                 if(length(tt)>1) {
-                  ttestPvalRatio[i]<-t.test((geneSetout$ratio[tt])/sdCorrection/geneSet$sd[tt],mu=0)$p.value
+                  ttestPvalRatio[i]<-save.t.test((geneSetout$ratio[tt]-fragRatio)/sdCorrection/geneSet$sd[tt],pnorm(AbsMeanSigmaRatio,lower.tail = FALSE)*2,mu=0)
                 }else {
                   ttestPvalRatio[i]<-pnorm(AbsMeanSigmaRatio,lower.tail = FALSE)*2
                 }
